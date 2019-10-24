@@ -1,11 +1,15 @@
-$keyVault = Get-AzKeyVault -VaultName $keyVaultName -ResourceGroupName $rgName;
+$keyVault = Get-AzKeyVault -VaultName "az-203keyvault1" -ResourceGroupName "az203newkeyvault";
 $diskEncryptionKeyVaultUrl = $keyVault.VaultUri;
 $keyVaultResourceId = $keyVault.ResourceId;
-$keyEncryptionKeyUrl = (Get-AzKeyVaultKey -VaultName $keyVaultName -Name myKey).Key.kid;
+$keyEncryptionKeyUrl = (Get-AzKeyVaultKey -VaultName "az-203keyvault1" -Name "az203diskencryption").Key.kid;
 
-Set-AzVMDiskEncryptionExtension -ResourceGroupName $rgName `
-    -VMName "myVM" `
+Set-AzVMDiskEncryptionExtension -ResourceGroupName "az203newvm" `
+    -VMName "az203newvm" `
     -DiskEncryptionKeyVaultUrl $diskEncryptionKeyVaultUrl `
     -DiskEncryptionKeyVaultId $keyVaultResourceId `
     -KeyEncryptionKeyUrl $keyEncryptionKeyUrl `
     -KeyEncryptionKeyVaultId $keyVaultResourceId
+    
+===== to review encryption details ===
+
+Get-AzVmDiskEncryptionStatus  -ResourceGroupName "az203newvm" -VMName "az203newvm"
